@@ -1,13 +1,13 @@
 <template>
   <div class="avatar">
-    <img :src="link" />
+    <img :src="content" />
   </div>
 </template>
 
 <script>
 export default {
   props: {
-    link: {
+    content: {
       type: String,
       required: true
     }

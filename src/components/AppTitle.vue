@@ -8,12 +8,7 @@
 
 <script>
 export default {
-  props: {
-    // nickname: {
-    //   type: String,
-    //   required: true
-    // }
-  }
+
 }
 </script>
 

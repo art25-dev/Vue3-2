@@ -1,13 +1,11 @@
 <template>
-  <button class="btn primary" @click="$emit('action')">
+  <button class="btn primary">
     <slot></slot>
   </button>
 </template>
 
 <script>
 export default {
-  emits: ['action'],
-  props: {}
 }
 </script>
 

@@ -3,36 +3,34 @@
     <form class="card card-w30">
       <div class="form-control">
         <label for="type">Тип блока</label>
-        <select id="type">
-          <option value="title">Заголовок</option>
-          <option value="subtitle">Подзаголовок</option>
-          <option value="avatar">Аватар</option>
-          <option value="text">Текст</option>
+        <select id="type" v-model="block">
+          <option value="app-title">Заголовок</option>
+          <option value="app-sub-title">Подзаголовок</option>
+          <option value="app-avatar">Аватар</option>
+          <option value="app-text">Текст</option>
         </select>
       </div>
 
       <div class="form-control">
         <label for="value">Значение</label>
-        <textarea id="value" rows="3"></textarea>
+        <textarea id="value" rows="3" v-model="textarea"></textarea>
       </div>
 
-      <app-button>Добавить</app-button>
+      <app-button :disabled="textarea.length < 4" @click.prevent="addBlock">Добавить</app-button>
     </form>
 
     <div class="card card-w70">
-      <app-title>Резюме Артема</app-title>
-      <app-avatar
-        link="https://cdn.dribbble.com/users/5592443/screenshots/14279501/drbl_pop_r_m_rick_4x.png"
-      ></app-avatar>
-      <app-sub-title>О себе</app-sub-title>
-      <app-text text="123"></app-text>
 
-      <h3>Добавьте первый блок, чтобы увидеть результат</h3>
+      <component v-for="item in blockList" :key="item.index" :is="item.name" :content="item.content">{{item.content}}</component>
+
+      <h3 v-if="blockList.length === 0">Добавьте первый блок, чтобы увидеть результат</h3>
     </div>
   </div>
   <div class="container">
     <p>
-      <app-button @click="getComments" v-if="!loading">Загрузить комментарии</app-button>
+      <app-button @click="getComments" v-if="comments.length === 0"
+        >Загрузить комментарии</app-button
+      >
     </p>
     <div class="card" v-if="comments.length">
       <app-sub-title>Комментарии</app-sub-title>
@@ -50,7 +48,6 @@
 </template>
 
 <script>
-
 import AppButton from './components/AppButton'
 import AppTitle from './components/AppTitle'
 import AppSubTitle from './components/AppSubTitle'
@@ -62,8 +59,12 @@ import AppLoader from './components/AppLoader'
 export default {
   data () {
     return {
+      isActive: false,
       loading: false,
-      comments: []
+      comments: [],
+      textarea: '',
+      block: 'app-title',
+      blockList: []
     }
   },
   methods: {
@@ -76,9 +77,17 @@ export default {
         }
       )
       this.comments = await res.json()
-      setTimeout(() => {
-        this.loading = false
-      }, 1000)
+      this.loading = false
+    },
+    addBlock () {
+      const block = {
+        name: this.block,
+        content: this.textarea
+      }
+
+      this.blockList.push(block)
+      this.textarea = ''
+      this.block = 'app-title'
     }
   },
   computed: {},

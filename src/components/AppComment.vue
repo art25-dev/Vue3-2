@@ -13,7 +13,6 @@
 export default {
   props: {
     mail: String
-    // text: String
   }
 }
 </script>
